@@ -1,31 +1,22 @@
 ---
-title: 'Using MDX'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jun 01 2024'
-heroImage: '../../assets/blog-placeholder-5.jpg'
+title: 'Automatizando el Orden: Script de Organización de Archivos con Node.js'
+description: 'Guía paso a paso para crear un script en Node.js que organiza automáticamente tu carpeta de descargas clasificando archivos por extensión.'
+pubDate: 'Jan 24 2026'
+heroImage: 'https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=1000&auto=format&fit=crop'
 ---
 
-This theme comes with the [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/) integration installed and configured in your `astro.config.mjs` config file. If you prefer not to use MDX, you can disable support by removing the integration from your config file.
+Como ingenieros de sistemas, sabemos que el orden es fundamental para mantener la eficiencia. Sin embargo, la carpeta de **Descargas** suele ser la excepción a la regla, convirtiéndose rápidamente en un caos de archivos mezclados.
 
-## Why MDX?
+Para solucionar esto, he desarrollado un script en **Node.js** que automatiza la limpieza, moviendo los archivos a carpetas categorizadas según su extensión. A continuación, explicaré el código paso a paso para que puedas implementarlo y personalizarlo.
 
-MDX is a special flavor of Markdown that supports embedded JavaScript & JSX syntax. This unlocks the ability to [mix JavaScript and UI Components into your Markdown content](https://docs.astro.build/en/guides/markdown-content/#mdx-features) for things like interactive charts or alerts.
+## Requisitos Previos
 
-If you have existing content authored in MDX, this integration will hopefully make migrating to Astro a breeze.
+Necesitarás tener instalado **Node.js** en tu equipo. Usaremos el módulo nativo `fs` (File System) en su versión de promesas para manejar las operaciones de archivos de manera asíncrona y limpia.
 
-## Example
+## Paso 1: Importación de Módulos
 
-Here is how you import and use a UI component inside of MDX.  
-When you open this page in the browser, you should see the clickable button below.
+Lo primero es importar las librerías necesarias. `fs/promises` nos permite trabajar con el sistema de archivos usando `async/await`, y `path` nos ayuda a manejar las rutas de los directorios sin preocuparnos por el sistema operativo (Windows/Linux).
 
-import HeaderLink from '../../components/HeaderLink.astro';
-
-<HeaderLink href="#" onclick="alert('clicked!')">
-	Embedded component in MDX
-</HeaderLink>
-
-## More Links
-
-- [MDX Syntax Documentation](https://mdxjs.com/docs/what-is-mdx)
-- [Astro Usage Documentation](https://docs.astro.build/en/guides/markdown-content/#markdown-and-mdx-pages)
-- **Note:** [Client Directives](https://docs.astro.build/en/reference/directives-reference/#client-directives) are still required to create interactive components. Otherwise, all components in your MDX will render as static HTML (no JavaScript) by default.
+```javascript
+import fs from 'fs/promises'
+import path, { extname } from 'path';

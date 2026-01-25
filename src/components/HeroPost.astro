@@ -10,18 +10,13 @@ import { Image } from "astro:assets";
 import FormattedDate from "./FormattedDate.astro";
 const { title, imageUrl, date, url } = Astro.props;
 
-// Formateo de fecha (Ej: 21 de enero de 2026)
-// const formattedDate = date.toLocaleDateString('es-ES', {
-//   year: 'numeric',
-//   month: 'long',
-//   day: 'numeric',
-// });
+
 ---
 
 <a href={url} class="group  w-full max-w-7xl mx-auto mb-16 flex flex-col justify-center items-center md:items-start md:justify-start">
   
   {/* 1. CONTENEDOR DE IMAGEN (Aspect Ratio 21:9 Cinemático o 16:9) */}
-  <div class="relative w-full aspect-video md:aspect-21/9 overflow-hidden rounded-2xl bg-slate-900 border border-white/10 shadow-sm transition-all duration-500 group-hover:shadow-2xl group-hover:border-blue-500/30">
+  <div class="relative w-full aspect-video md:aspect-21/10 overflow-hidden rounded-2xl bg-slate-900 border border-white/10 shadow-sm transition-all duration-500 group-hover:shadow-xs group-hover:shadow-sky-400">
     
     {/* Imagen con Zoom Suave */}
     <Image 
@@ -41,7 +36,7 @@ const { title, imageUrl, date, url } = Astro.props;
   <div class="mt-6 md:mt-8 space-y-3 px-1 md:px-0">
     
     {/* Título Masivo */}
-    <h2 class="text-3xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1] transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+    <h2 class="text-3xl md:text-5xl font-black tracking-tighter text-white leading-[1.1] transition-colors duration-300 group-hover:text-sky-400">
       {title}
     </h2>
 
