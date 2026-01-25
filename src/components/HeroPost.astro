@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  imageUrl: unknown;
+  date: Date;
+  url: string;
+}
+
+import { Image } from "astro:assets";
+import FormattedDate from "./FormattedDate.astro";
+const { title, imageUrl, date, url } = Astro.props;
+
+// Formateo de fecha (Ej: 21 de enero de 2026)
+// const formattedDate = date.toLocaleDateString('es-ES', {
+//   year: 'numeric',
+//   month: 'long',
+//   day: 'numeric',
+// });
+---
+
+<a href={url} class="group  w-full max-w-7xl mx-auto mb-16 flex flex-col justify-center items-center md:items-start md:justify-start">
+  
+  {/* 1. CONTENEDOR DE IMAGEN (Aspect Ratio 21:9 Cinemático o 16:9) */}
+  <div class="relative w-full aspect-video md:aspect-21/9 overflow-hidden rounded-2xl bg-slate-900 border border-white/10 shadow-sm transition-all duration-500 group-hover:shadow-2xl group-hover:border-blue-500/30">
+    
+    {/* Imagen con Zoom Suave */}
+    <Image 
+      src={imageUrl as string} 
+      alt={title} 
+      width={1020}
+      height={359}
+      class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+      loading="eager"
+    />
+
+    {/* Overlay Sutil (Solo aparece en Hover para dar foco) */}
+    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
+  </div>
+
+  {/* 2. CONTENIDO (Minimalista: Título + Fecha) */}
+  <div class="mt-6 md:mt-8 space-y-3 px-1 md:px-0">
+    
+    {/* Título Masivo */}
+    <h2 class="text-3xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1] transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+      {title}
+    </h2>
+
+    {/* Meta Data (Fecha Tecnológica) */}
+    <div class="flex items-center gap-2">
+      <div class="h-px w-8 bg-slate-300 dark:bg-slate-700"></div>
+      <time datetime={date.toISOString()} class="font-mono text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+        <FormattedDate date={date} />
+      </time>
+    </div>
+
+  </div>
+</a>

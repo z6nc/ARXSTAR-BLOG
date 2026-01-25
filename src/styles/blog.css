@@ -1,0 +1,217 @@
+  /* * ESTILOS GLOBALES & RESET 
+   * Forzamos el tema oscuro (Black Tech)
+   */
+  body {
+    background-color: #050505; /* Casi negro absoluto */
+    color: #e2e8f0; /* Blanco hueso para leer sin cansar */
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  main {
+    width: 100%;
+    max-width: 800px; /* Ancho óptimo de lectura */
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  /* * HEADER DEL POST 
+   */
+  .post-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .meta-data {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #3b82f6; /* Azul Tech */
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  }
+
+  .date-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .post-title {
+    font-size: 2.5rem; /* Grande */
+    font-weight: 900;
+    line-height: 1.1;
+    color: #ffffff;
+    margin: 0 0 2rem 0;
+    letter-spacing: -1px;
+  }
+
+  @media (min-width: 768px) {
+    .post-title { font-size: 3.5rem; }
+  }
+
+  .separator {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #2563eb, #06b6d4);
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+
+  /* * ESTILOS DEL CONTENIDO (TIPOGRAFÍA)
+   * Aquí controlamos como se ve el Markdown renderizado
+   */
+  .blog-content {
+    font-size: 1.125rem; /* 18px para buena lectura */
+    color: #cbd5e1;
+  }
+
+  /* Párrafos */
+  .blog-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+  }
+
+  /* Encabezados (H2, H3...) dentro del post */
+  .blog-content h2 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 0.5rem;
+  }
+
+  .blog-content h3 {
+    color: #f1f5f9;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Enlaces */
+  .blog-content a {
+    color: #60a5fa;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .blog-content a:hover {
+    border-bottom-color: #60a5fa;
+  }
+
+  /* Listas */
+  .blog-content ul, .blog-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  .blog-content li {
+    margin-bottom: 0.5rem;
+    color: #cbd5e1;
+  }
+  .blog-content li::marker {
+    color: #3b82f6; /* Bullet points azules */
+  }
+
+  /* Citas (Blockquotes) */
+  .blog-content blockquote {
+    background: rgba(59, 130, 246, 0.05);
+    border-left: 4px solid #3b82f6;
+    margin: 2rem 0;
+    padding: 1rem 1.5rem;
+    font-style: italic;
+    color: #e2e8f0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Imágenes dentro del post */
+  .blog-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 2rem 0;
+    border: 1px solid #334155;
+  }
+
+  /* * === ZONA DE CÓDIGO (ESTILO TERMINAL) === 
+   * Esto es lo que no te funcionaba con Tailwind.
+   * Aquí lo forzamos con CSS puro.
+   */
+
+  /* Código en línea (ej: `const a = 1`) */
+  .blog-content :not(pre) > code {
+    background-color: rgba(30, 41, 59, 0.8);
+    color: #38bdf8; /* Azul cyan claro */
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    border: 1px solid #334155;
+  }
+
+  /* Bloques de código (Pre) */
+  .blog-content pre {
+    background-color: #0d1117 !important; /* Fondo Terminal oscuro */
+    color: #e6edf3;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+    overflow-x: auto; /* Scroll horizontal si es largo */
+    border: 1px solid #30363d;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+    padding-top: 3rem; /* Espacio para los botones de ventana */
+  }
+
+  /* Simulación de botones de ventana (Mac style) en CSS puro */
+  .blog-content pre::before {
+    content: "";
+    position: absolute;
+    top: 1rem;
+    left: 1.5rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ff5f56; /* Rojo */
+    box-shadow: 
+      20px 0 0 #ffbd2e, /* Amarillo */
+      40px 0 0 #27c93f; /* Verde */
+  }
+
+  /* Etiqueta "Terminal" opcional en la esquina derecha */
+  .blog-content pre::after {
+    content: "bash / zsh"; /* Puedes cambiar esto o quitarlo */
+    position: absolute;
+    top: 0.8rem;
+    right: 1.5rem;
+    font-family: sans-serif;
+    font-size: 0.7rem;
+    color: #4b5563;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .blog-content pre code {
+    background: transparent !important;
+    border: none !important;
+    color: inherit;
+    padding: 0;
+    font-family: 'Menlo', 'Consolas', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }

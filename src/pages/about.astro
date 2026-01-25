@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+---
+
+<Layout
+	title="Nuestra Historia"
+	description="Hola, soy Andrés. Descubre cómo 5 años de carrera se convirtieron en ARX STAR."
+	pubDate={new Date(2026, 0, 23)}
+	heroImage={AboutHeroImage}
+>
+	<div class="prose prose-lg prose-invert mx-auto text-slate-300">
+		
+		<div class="mb-16">
+			<span class="inline-block py-1 px-3 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono mb-4 tracking-wider">
+				&lt;ORIGIN_STORY /&gt;
+			</span>
+			
+			<h2 class="text-5xl md:text-6xl font-black text-white mb-8 tracking-tight leading-tight">
+				Hola, soy <span class="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-300">Andrés.</span>
+			</h2>
+
+			<p class="text-xl leading-relaxed text-slate-300">
+				Este blog no nació de la nada. Nació de una intención genuina: <strong class="text-white">aprender juntos</strong>.
+			</p>
+			<p>
+				A lo largo de mis <strong class="text-white">5 años de carrera</strong> en ingeniería, he acumulado aciertos, errores y lecciones que no te enseñan en la universidad. Me di cuenta de que guardar ese conocimiento no tenía sentido (ni lógica).
+			</p>
+			<p>
+				ARX STAR surge con una promesa simple: si puedo entregarte valor, ahorrarte un tropiezo o darte el tip que necesitas para avanzar, lo haré. 
+			</p>
+		</div>
+
+		<div class="w-full h-px bg-linear-to-r from-transparent via-blue-900 to-transparent my-16 opacity-50"></div>
+
+		<div class="mb-16">
+			<h2 class="text-4xl font-bold text-white mb-8">Quiénes Somos</h2>
+			
+			<div class="relative group my-8">
+				<div class="absolute -inset-0.5 bg-linear-to-r from-indigo-500 to-purple-600 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+				
+				<div class="relative bg-slate-900 p-6 rounded-lg border border-slate-800">
+					<div class="flex gap-2 mb-4">
+						<div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+						<div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+						<div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+					</div>
+					<code class="block font-mono text-sm text-indigo-400 mb-2">// philosophy.ts</code>
+					<p class="font-medium text-slate-200 italic text-lg m-0 border-l-2 border-indigo-500/50 pl-4">
+						"ARX STAR nace para exponer, sin filtros, el camino de un ingeniero en constante evolución."
+					</p>
+				</div>
+			</div>
+
+			<p>
+				No somos una enciclopedia aburrida. Somos el reflejo de la realidad técnica y humana. 
+				Nuestra filosofía es radicalmente simple: <strong class="text-white decoration-indigo-500 underline decoration-2 underline-offset-4">enseñar es la mejor forma de aprender.</strong>
+			</p>
+			<p>
+				Aquí no buscamos la verdad absoluta, sino la <strong class="text-indigo-300">utilidad real</strong>. Queremos ser transparentes sobre lo que significa construir tecnología hoy en día.
+			</p>
+		</div>
+
+		<div class="relative rounded-xl overflow-hidden mb-16 border border-slate-800 group">
+			<div class="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition-colors z-10"></div>
+			<img 
+				src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" 
+				alt="Colaboración y aprendizaje" 
+				class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+			/>
+		</div>
+
+		<div>
+			<h2 class="text-4xl font-bold text-white mb-8">Nuestra Motivación</h2>
+			<p class="text-lg">
+				Creemos en el <strong class="text-teal-300">potencial de los jóvenes</strong>. Nos mueve la idea de facilitar el acceso al conocimiento en ingeniería de sistemas, eliminando las barreras que a veces nos frenan al inicio.
+			</p>
+			
+			<div class="bg-slate-900/50 border-l-4 border-teal-500 p-4 mt-6">
+				<p class="m-0 text-slate-300">
+					Estoy convencido de algo: <strong class="text-white">al ayudarte a no perderte, yo también evoluciono contigo.</strong>
+				</p>
+			</div>
+			
+			<div class="mt-12 p-4 border border-teal-500/30 rounded bg-teal-500/5 flex items-center gap-3 w-fit">
+				<div class="relative flex h-3 w-3">
+				  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+				  <span class="relative inline-flex rounded-full h-3 w-3 bg-teal-500"></span>
+				</div>
+				<span class="font-mono text-teal-300 text-sm font-bold tracking-wide">SYSTEM_STATUS: READY TO EVOLVE</span>
+			</div>
+		</div>
+
+	</div>
+</Layout>

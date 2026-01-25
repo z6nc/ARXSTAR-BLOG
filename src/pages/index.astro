@@ -1,0 +1,40 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import "../styles/global.css";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import { getCollection } from "astro:content";
+import HeroPost from "../components/HeroPost.astro";
+
+const posts = await getCollection("blog");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="bg-black">
+    <Header />
+    <main class="max-w-7xl mx-auto py-9">
+      <section class="">
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-9 mx-4">
+          {
+            [...posts].reverse().map((post) => (
+              <li>
+                <HeroPost
+                  title={post.data.title}
+                  imageUrl={post.data.heroImage}
+                  date={post.data.pubDate}
+                  url={`/blog/${post.id}/`}
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
