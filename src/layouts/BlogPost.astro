@@ -6,15 +6,47 @@ import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import "../styles/blog.css";
 import Logo from "../components/common/Logo.astro";
+import { SITE_TITLE } from "../consts";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="es">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description}
+      image={heroImage}
+      type="article"
+      pubDate={pubDate}
+      updatedDate={updatedDate}
+      locale="es_ES"
+    />
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        name: title,
+        description,
+        datePublished: pubDate?.toISOString?.(),
+        dateModified: updatedDate?.toISOString?.(),
+        mainEntityOfPage: canonicalURL.toString(),
+        url: canonicalURL.toString(),
+        image: heroImage ? new URL(heroImage.src, Astro.site).toString() : undefined,
+        author: {
+          "@type": "Organization",
+          name: SITE_TITLE,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: SITE_TITLE,
+        },
+      })}
+    </script>
   </head>
 
   <body>

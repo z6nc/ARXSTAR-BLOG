@@ -1,0 +1,12 @@
+# robots.txt for ARX STAR Blog
+# Optimizado para buscadores
+
+User-agent: *
+Allow: /
+
+# Bloquea el rastreo de páginas de búsqueda interna para ahorrar presupuesto de rastreo
+Disallow: /search
+Disallow: /api/
+
+# Asegúrate de que esta URL sea la correcta después de generar tu build
+Sitemap: https://arxstarblog.vercel.app/sitemap-index.xml
