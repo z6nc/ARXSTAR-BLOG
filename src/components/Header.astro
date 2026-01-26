@@ -1,8 +1,10 @@
 ---
+import Logo from "./common/Logo.astro";
 const navItems = [
   { label: "Inicio", href: "/" },
   { label: "About", href: "/about" },
 ];
+
 ---
 
 <header class="relative w-full bg-|[#0a0a0a] border-b border-white/10 ">
@@ -10,15 +12,7 @@ const navItems = [
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
     
     <a href="/" class="group flex items-center gap-3 select-none">
-      
-
-      {/* Texto */}
-      <span class="text-xl md:text-2xl font-black tracking-tighter text-white leading-none">
-        ARX
-        <span class="text-sky-400 ">
-          STAR
-        </span>
-      </span>
+      <Logo />
     </a>
 
     {/* 2. NAVEGACIÓN + TOGGLE */}
