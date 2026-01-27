@@ -15,17 +15,16 @@ const { title, imageUrl, date, url } = Astro.props;
   href={url}
   class="group w-full max-w-7xl mx-auto mb-16 flex flex-col justify-center items-center md:items-start md:justify-start"
 >
-  {/* 1. CONTENEDOR DE IMAGEN (Aspect Ratio 21:9 Cinemático o 16:9) */}
   <div
-    class="relative w-full aspect-video md:aspect-21/10 overflow-hidden rounded-2xl border border-white/10 shadow-sm transition-all duration-500"
+    class="relative w-full aspect-video md:aspect-21/13 overflow-hidden rounded-2xl border border-white/10 shadow-sm transition-all duration-500"
   >
     {/* Imagen con Zoom Suave */}
     <Image
       src={imageUrl as string}
       alt={title}
       width={1020}
-      height={359}
-      class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+      height={674}
+      class="w-full h-full object-cover  transition-transform duration-700 ease-out group-hover:scale-105  group-hover:saturate-150"
       loading="lazy"
     />
 
