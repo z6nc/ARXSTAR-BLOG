@@ -1,7 +1,7 @@
 ---
 import Logo from "./common/Logo.astro";
+import Github from "./common/Github.astro";
 const navItems = [
-  { label: "Inicio", href: "/" },
   { label: "About", href: "/about" },
 ];
 
@@ -11,19 +11,19 @@ const navItems = [
   
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
     
-    <a href="/" class="group flex items-center gap-3 select-none">
+    <a href="/" class="group flex items-center justify-center gap-3 select-none">
       <Logo />
     </a>
 
     {/* 2. NAVEGACIÓN + TOGGLE */}
-    <div class="flex items-center gap-8">
+    <div class="flex items-center gap-4">
       
       {/* Enlaces de Navegación */}
       <nav class="hidden sm:flex items-center gap-6">
         {navItems.map((item) => (
           <a
             href={item.href}
-            class="text-xs font-bold uppercase tracking-[0.15em] text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-white transition-colors duration-200"
+            class="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 hover:text-white transition-colors duration-200"
           >
             {item.label}
           </a>
@@ -34,17 +34,7 @@ const navItems = [
       <div class="hidden sm:block w-px h-4 bg-slate-200 dark:bg-white/10"></div>
 
       {/* Botón Theme Toggle (Sin JS pesado) */}
-      <button
-        id="theme-toggle"
-        class="group relative flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white transition-all focus:outline-none"
-        aria-label="Cambiar tema"
-      >
-        {/* Sol (Se muestra en Dark) */}
-        <svg class="hidden dark:block w-5 h-5 transition-transform group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-        
-        {/* Luna (Se muestra en Light) */}
-        <svg class="block dark:hidden w-5 h-5 transition-transform group-hover:-rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-      </button>
+      <Github />
 
     </div>
   </div>
