@@ -1,13 +1,11 @@
 ---
 import Layout from "../layouts/BlogPost.astro";
-import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
 ---
 
 <Layout
   title="Nuestra Historia"
   description="Hola, soy Andrés. Descubre cómo 5 años de carrera se convirtieron en ARX STAR."
   pubDate={new Date(2026, 0, 23)}
-  heroImage={AboutHeroImage}
 >
   <div class="prose prose-lg prose-invert mx-auto text-slate-300">
     <div class="mb-16">
@@ -51,7 +49,7 @@ import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
       >
       </div>
       <img
-        src="https://res.cloudinary.com/dleem7osr/image/upload/LogoEmpresaMejorado_thayb5.webp"
+        src="/src/assets/LogoArxStar.webp"
         alt="Colaboración y aprendizaje"
         class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
         loading="lazy"
