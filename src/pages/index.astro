@@ -9,13 +9,13 @@ import HeroPost from "../components/HeroPost.astro";
 
 const posts = await getCollection("blog");
 const lastPost = posts[posts.length - 1];
-
+const urlImagen ="https://res.cloudinary.com/dleem7osr/image/upload/LogoArxStar_r7l2ma.webp"
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} image={{ src: urlImagen , format: "webp" , width: 800, height: 600}} />
   </head>
   <body class="bg-black min-h-screen flex flex-col justify-between">
     <Header />

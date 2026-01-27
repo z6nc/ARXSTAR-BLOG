@@ -1,11 +1,15 @@
 ---
 import Layout from "../layouts/BlogPost.astro";
+const urlImagen ="https://res.cloudinary.com/dleem7osr/image/upload/LogoArxStar_r7l2ma.webp"
+
 ---
 
 <Layout
   title="Nuestra Historia"
   description="Hola, soy Andrés. Descubre cómo 5 años de carrera se convirtieron en ARX STAR."
   pubDate={new Date(2026, 0, 23)}
+  heroImage={{ src: urlImagen , format: "webp" , width: 800, height: 600}}
+
 >
   <div class="prose prose-lg prose-invert mx-auto text-slate-300">
     <div class="mb-16">
@@ -49,7 +53,7 @@ import Layout from "../layouts/BlogPost.astro";
       >
       </div>
       <img
-        src="/src/assets/LogoArxStar.webp"
+        src="https://res.cloudinary.com/dleem7osr/image/upload/LogoArxStar_r7l2ma.webp"
         alt="Colaboración y aprendizaje"
         class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
         loading="lazy"

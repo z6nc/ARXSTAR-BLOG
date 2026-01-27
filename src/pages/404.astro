@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import "../styles/global.css";
+import LogoArxStar from "../assets/LogoArxStar.webp";
 ---
 
 <!doctype html>
@@ -12,6 +13,7 @@ import "../styles/global.css";
     <BaseHead
       title="404: System Error | ARX STAR"
       description="Página no encontrada"
+      image={LogoArxStar}
     />
   </head>
   <body class="flex flex-col bg-black text-white antialiased selection:bg-sky-500/30 selection:text-sky-200">
