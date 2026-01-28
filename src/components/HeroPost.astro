@@ -24,7 +24,7 @@ const { title, imageUrl, date, url } = Astro.props;
       alt={title}
       width={1020}
       height={674}
-      class="w-full h-full object-cover  transition-transform duration-700 ease-out group-hover:scale-105  group-hover:saturate-150"
+      class="w-full h-full object-top transition-transform duration-700 ease-out group-hover:scale-105  group-hover:saturate-150"
       loading="lazy"
     />
 
@@ -34,10 +34,10 @@ const { title, imageUrl, date, url } = Astro.props;
     </div>
   </div>
 
-  <div class="mt-6 md:mt-8 space-y-3 px-1 md:px-0">
+  <div class="mt-6 md:mt-8 space-y-3 px-1 md:px-0 ">
     {/* Título Masivo */}
     <h2
-      class="text-3xl md:text-4xl font-black tracking-tighter text-white leading-[1.1] transition-colors duration-300 group-hover:text-sky-400"
+      class="text-3xl md:text-4xl font-black tracking-tighter  text-white leading-[1.1] transition-colors duration-300 group-hover:text-sky-400"
     >
       {title}
     </h2>
