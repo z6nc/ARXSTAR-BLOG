@@ -4,11 +4,12 @@ interface Props {
   imageUrl: unknown;
   date: Date;
   url: string;
+  ramdon?: number;
 }
 
 import { Image } from "astro:assets";
 import FormattedDate from "./FormattedDate.astro";
-const { title, imageUrl, date, url } = Astro.props;
+const { title, imageUrl, date, url, ramdon } = Astro.props;
 ---
 
 <a
@@ -24,7 +25,7 @@ const { title, imageUrl, date, url } = Astro.props;
       alt={title}
       width={1020}
       height={674}
-      class="w-full h-full object-top transition-transform duration-700 ease-out group-hover:scale-105  group-hover:saturate-150"
+      class="w-full h-full object-top transition-transform duration-700 ease-out group-hover:scale-105 group-hover:saturate-150"
       loading="lazy"
     />
 
@@ -34,23 +35,38 @@ const { title, imageUrl, date, url } = Astro.props;
     </div>
   </div>
 
-  <div class="mt-6 md:mt-8 space-y-3 px-1 md:px-0 ">
+  <div class="mt-6 md:mt-8 space-y-3 px-1 md:px-0">
     {/* Título Masivo */}
     <h2
-      class="text-3xl md:text-4xl font-black tracking-tighter  text-white leading-[1.1] transition-colors duration-300 group-hover:text-sky-400"
+      class="text-3xl md:text-4xl font-black tracking-tighter text-white leading-[1.1] transition-colors duration-300 group-hover:text-sky-400"
     >
       {title}
     </h2>
-
-    {/* Meta Data (Fecha Tecnológica) */}
-    <div class="flex items-center gap-2">
-      <div class="h-px w-8 bg-slate-700"></div>
+    <div class="inline-flex gap-2 items-center justify-center">
       <time
         datetime={date.toISOString()}
         class="font-mono text-sm text-slate-400 uppercase tracking-wider"
       >
         <FormattedDate date={date} />
       </time>
+      <div class="text-slate-500">/</div>
+      <div class="flex items-center gap-2">
+        {/* Punto de estado (Live) */}
+        <span class="relative flex h-2 w-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+          ></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"
+          ></span>
+        </span>
+
+        {/* Texto Minimalista */}
+        <h3
+          class="font-mono text-sm text-slate-400 uppercase tracking-widest "
+        >
+          {ramdon} Personas Leyendo
+        </h3>
+      </div>
     </div>
   </div>
 </a>
