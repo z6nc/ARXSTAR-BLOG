@@ -1,0 +1,253 @@
+---
+title: 'Automatiza tus Descargas en 1 min con Node.js'
+description: 'Guía paso a paso para crear un script en Node.js que organiza automáticamente tu carpeta de descargas clasificando archivos por extensión.'
+pubDate: 'Jan 24 2026'
+heroImage: '../../assets/PortadaPixelArt.webp'
+---
+
+Como ingenieros de sistemas, sabemos que el orden es fundamental para mantener la eficiencia. Sin embargo, la carpeta de **Descargas** suele ser la excepción a la regla, convirtiéndose rápidamente en un caos de archivos mezclados.
+
+Para solucionar esto, he desarrollado un script en **Node.js** que automatiza la limpieza, moviendo los archivos a carpetas categorizadas según su extensión. A continuación, explicaré el código paso a paso para que puedas implementarlo y personalizarlo.
+
+![Imagen referente Node js](../../assets/PortadaPixelArt.webp)
+
+## Requisitos Previos
+
+Necesitarás tener instalado **Node.js** en tu equipo. Usaremos el módulo nativo `fs` (File System) en su versión de promesas para manejar las operaciones de archivos de manera asíncrona y limpia.
+
+## Paso 1: Importación de Módulos
+
+Lo primero es importar las librerías necesarias. `fs/promises` nos permite trabajar con el sistema de archivos usando `async/await`, y `path` nos ayuda a manejar las rutas de los directorios sin preocuparnos por el sistema operativo (Windows/Linux).
+
+```javascript
+import fs from 'fs/promises'
+import path, { extname } from 'path';
+```
+
+## 2. Definición de Reglas y Rutas
+
+Para que un sistema sea útil, debe ser escalable. En lugar de escribir múltiples condiciones `if/else` para cada archivo, utilizaremos un **objeto de configuración**.
+
+### Categorización
+
+Creamos un objeto constante llamado `categorias`. Las **claves** serán los nombres de las carpetas que el script creará automáticamente, y los **valores** son listas (arrays) de extensiones que pertenecen a esa categoría.
+
+> **Tip de Escalabilidad:** Si mañana necesitas ordenar archivos de Rust (`.rs`) o Go (`.go`), simplemente agrégalos al array `dev`. No necesitas tocar la lógica principal.
+
+```javascript
+const categorias = {
+    imagenes: ['.jpg', '.jpeg', '.png', '.svg', '.gif', '.webp', '.ico', '.tiff'],
+    documentos: ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.csv', '.epub'],
+    texto: ['.txt', '.md', '.log', '.rtf'],
+    dev: [
+        '.html', '.htm', '.css', '.scss', '.sass', '.less',
+        '.js', '.jsx', '.ts', '.tsx',
+        '.py', '.java', '.c', '.cs', '.php', '.bat', '.sh',
+        '.sql', '.json', '.xml', '.yaml', '.yml', '.env', '.toml'
+    ],
+    ejecutables: ['.exe', '.msi', '.apk', '.jar', '.iso', '.dmg', '.bin'],
+    comprimidos: ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2'],
+    multimedia: ['.mp3', '.wav', '.ogg', '.mp4', '.mkv', '.mov', '.avi', '.flv', '.webm']
+};
+
+```
+### Rutas de Directorio
+Aquí definimos el `Input` y el `Output` de nuestro sistema.
+
+> **En consideracion :** Estas rutas son ejemplos. Debes modificarlas para que coincidan con tu usuario y estructura de carpetas en Windows. Recuerda usar doble barra invertida `\\` en Windows para escapar el carácter especial.
+
+```javascript
+// Input: La carpeta que queremos limpiar
+const folderPath = "C:\\Users\\unknow\\Downloads"
+
+// Output: Donde se guardará todo ordenado
+const folderPathFilesOrder = "C:\\Users\\unknow\\Desktop\\Descargas_Ordenadas"
+```
+
+## 3. Lógica Auxiliar y Manejo del Sistema de Archivos
+
+Para mantener nuestra función principal limpia y legible, abstraemos tareas repetitivas en funciones auxiliares. Esto facilita el mantenimiento y la depuración.
+
+### Normalización de Rutas (`unionPath`)
+
+Uno de los errores más comunes al trabajar con archivos es la construcción manual de rutas (ej: `ruta + "\\" + archivo`). Esto falla si cambias de Windows a Linux.
+
+Para solucionarlo, usamos `path.join`. Creamos un objeto helper que estandariza cómo unimos las rutas tanto para el origen como para el destino.
+
+```javascript
+const unionPath = {
+    origen: (tuCarpetaBase, archivo) => path.join(tuCarpetaBase, archivo),
+    destino: (tuCarpetaBaseDestino, carpetaCategoria, archivo) => path.join(tuCarpetaBaseDestino, carpetaCategoria, archivo)
+}
+```
+
+### Creación Segura de Carpetas (`CreadorDeCarpeta`)
+Antes de mover un archivo a una carpeta **(por ejemplo, /imagenes)**, debemos estar seguros de que esa carpeta existe. Si intentamos mover un archivo a una ruta inexistente, el script fallará.
+
+Esta función asíncrona utiliza **fs.mkdir** con la opción `{ recursive: true }`.
+
+> **¿Por qué recursive: true?**  Esta opción es vital. Si la carpeta ya existe, no lanza un error. Si la ruta completa no existe, **por ejemplo : .../CarpetaNueva/SubCarpeta**, crea toda la estructura necesaria.
+
+```javascript
+async function CreadorDeCarpeta(RutaBase, NombreCarpeta) {
+    if (!NombreCarpeta) return;
+    const rutaDeLaNuevaCarpeta = path.join(RutaBase, NombreCarpeta)
+    await fs.mkdir(rutaDeLaNuevaCarpeta, { recursive: true });
+}
+```
+## 4. El Motor de Procesamiento: `OrganizadorFiles`
+
+Esta función principal es la encargada de orquestar todo el proceso. Analicémosla por partes para entender la lógica de decisión.
+
+### Lectura Inteligente del Directorio
+
+Usamos `fs.readdir` con la opción `{ withFileTypes: true }`.
+
+> **¿Por qué `withFileTypes`?**
+> Por defecto, `readdir` solo devuelve nombres (strings). Al activar esta opción, obtenemos objetos `Dirent` que nos permiten preguntar `file.isFile()` o `file.isDirectory()`. Esto es crucial para **no intentar mover carpetas por error**, lo que causaría un desastre.
+
+### Clasificación Dinámica
+
+Dentro del bucle, extraemos la extensión del archivo y buscamos su "match" en nuestro objeto `categorias`.
+
+Usamos `Object.entries(categorias).find(...)` para recorrer el mapa. Si la extensión del archivo actual existe en el array de una categoría, obtenemos el nombre de esa categoría (ej: "imagenes").
+
+### Ejecución y Manejo de Errores
+
+Finalmente, si encontramos una categoría:
+1.  Llamamos a `CreadorDeCarpeta` (por si acaso no existe).
+2.  Usamos `fs.rename` para mover el archivo de la ruta A a la ruta B.
+3.  Envolvemos la operación en un bloque `try/catch` para que, si un archivo falla (por ejemplo, si está abierto en otro programa), el script no se detenga y continúe con el siguiente.
+
+```javascript
+async function OrganizadorFiles() {
+    // Leemos el contenido de la carpeta fuente
+    const files = await fs.readdir(folderPath, { withFileTypes: true });
+
+    for (const file of files) {
+        // Filtro de seguridad: Solo procesamos archivos
+        if (file.isFile()) {
+            const nombreArchivo = file.name;
+            const extension = extname(nombreArchivo).toLowerCase(); 
+
+            // Lógica de búsqueda: ¿A qué categoría pertenece esta extensión?
+            const tipo = Object.entries(categorias).find(([_, extensiones]) =>
+                extensiones.includes(extension)
+            )?.[0];
+
+            // Si no tiene categoría definida, lo ignoramos y pasamos al siguiente
+            if (!tipo) {
+                console.log(`Salteando ${nombreArchivo} (no está en categorías)`);
+                continue;
+            }
+
+            // Aseguramos que el destino exista
+            await CreadorDeCarpeta(folderPathFilesOrder, tipo);
+
+            // Intentamos mover el archivo
+            try {
+                await fs.rename(
+                    unionPath.origen(folderPath, nombreArchivo),
+                    unionPath.destino(folderPathFilesOrder, tipo, nombreArchivo)
+                );
+                console.log(`Movido: ${nombreArchivo} -> ${tipo}`);
+            } catch (error) {
+                console.error(`No se pudo mover ${nombreArchivo}:`, error.message);
+            }
+        } else {
+            console.log(`${file.name} es una carpeta, se ignora.`);
+        }
+    }
+}
+```
+## 5. Código Completo y Ejecución
+
+A continuación, encontrarás el script completo. Copia este código, pégalo en un archivo llamado `organizador.js` y asegúrate de actualizar las variables `folderPath` y `folderPathFilesOrder` con tus propias rutas.
+
+Para ejecutarlo, simplemente abre tu terminal y corre:
+
+```bash
+node organizador.js
+```
+```javascript
+import fs from 'fs/promises'
+import path, { extname } from 'path';
+
+// --- CONFIGURACIÓN ---
+const categorias = {
+    imagenes: ['.jpg', '.jpeg', '.png', '.svg', '.gif', '.webp', '.ico', '.tiff'],
+    documentos: ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.csv', '.epub'],
+    texto: ['.txt', '.md', '.log', '.rtf'],
+    dev: [
+        '.html', '.htm', '.css', '.scss', '.sass', '.less',
+        '.js', '.jsx', '.ts', '.tsx',
+        '.py', '.java', '.c', '.cs', '.php', '.bat', '.sh',
+        '.sql', '.json', '.xml', '.yaml', '.yml', '.env', '.toml'
+    ],
+    ejecutables: ['.exe', '.msi', '.apk', '.jar', '.iso', '.dmg', '.bin'],
+    comprimidos: ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2'],
+    multimedia: ['.mp3', '.wav', '.ogg', '.mp4', '.mkv', '.mov', '.avi', '.flv', '.webm']
+};
+
+// ¡RECUERDA CAMBIAR ESTAS RUTAS POR LAS TUYAS!
+const folderPath = "C:\\Users\\unknow\\Downloads"
+const folderPathFilesOrder = "C:\\Users\\unknow\\Desktop\\Descargas_Ordenadas"
+
+// --- HELPERS ---
+const unionPath = {
+    origen: (tuCarpetaBase, archivo) => path.join(tuCarpetaBase, archivo),
+    destino: (tuCarpetaBaseDestino, carpetaCategoria, archivo) => path.join(tuCarpetaBaseDestino, carpetaCategoria, archivo)
+}
+
+async function CreadorDeCarpeta(RutaBase, NombreCarpeta) {
+    if (!NombreCarpeta) return;
+    const rutaDeLaNuevaCarpeta = path.join(RutaBase, NombreCarpeta)
+    await fs.mkdir(rutaDeLaNuevaCarpeta, { recursive: true });
+}
+
+// --- LÓGICA PRINCIPAL ---
+async function OrganizadorFiles() {
+    try {
+        const files = await fs.readdir(folderPath, { withFileTypes: true });
+        console.log(`Iniciando organización de ${files.length} elementos...`);
+
+        for (const file of files) {
+            if (file.isFile()) {
+                const nombreArchivo = file.name;
+                const extension = extname(nombreArchivo).toLowerCase();
+                
+                const tipo = Object.entries(categorias).find(([_, extensiones]) =>
+                    extensiones.includes(extension)
+                )?.[0];
+
+                if (!tipo) {
+                    console.log(`[INFO] Salteando ${nombreArchivo} (sin categoría)`);
+                    continue;
+                }
+
+                await CreadorDeCarpeta(folderPathFilesOrder, tipo);
+                
+                try {
+                    await fs.rename(
+                        unionPath.origen(folderPath, nombreArchivo),
+                        unionPath.destino(folderPathFilesOrder, tipo, nombreArchivo)
+                    );
+                    console.log(`[OK] Movido: ${nombreArchivo} -> /${tipo}`);
+                } catch (error) {
+                    console.error(`[ERROR] Falló al mover ${nombreArchivo}:`, error.message);
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Error crítico al leer el directorio:", error);
+    }
+}
+
+// Ejecutar
+OrganizadorFiles();
+```
+## 6. Gracias por Leer
+> Si tienes dudas sobre el código, sugerencias para mejorarlo o simplemente quieres conectar para hablar de tecnología e ingeniería de sistemas, búscame en 
+[@andresdev](https://docs.astro.build/en/guides/integrations-guide/mdx/)
+
+[POST DE LINKEDIN](https://www.linkedin.com/in/andresvelasquezdev/)

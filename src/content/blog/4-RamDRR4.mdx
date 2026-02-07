@@ -1,0 +1,214 @@
+---
+title: '¿Por qué tu PC odia tu nueva RAM? Guía para Comprar la Memoria Perfecta '
+description: 'Evita pantallazos azules y cuellos de botella. Aprende a extraer la información exacta de tu Motherboard y RAM sin abrir la carcasa.'
+pubDate: 'Feb 06 2026'
+heroImage: '../../assets/PortadasRam.webp'
+---
+
+## El Costo de la Ignorancia
+
+¿Alguna vez has sentido esa frustración de gastar dinero en un componente nuevo, instalarlo con ilusión y recibir a cambio una pantalla negra o un **Pantallazo Azul de la Muerte (BSOD)**?
+
+Comprar memoria RAM no es como comprar un USB. No puedes simplemente elegir **"la más barata"** o **"la que tiene más luces"**. Si cometes el error de ignorar la compatibilidad, te enfrentas a tres horrores:
+1.  🧩**Incompatibilidad Física:** Intentar meter una RAM `DDR5` en una ranura `DDR4` (spoiler: no entra).
+2.  🚧**Cuello de Botella:** Comprar una memoria carísima de 3600MHz para que tu placa la limite a 2666MHz.
+3.  ⚠️**Inestabilidad del Sistema:** Reinicios aleatorios porque los voltajes no coinciden.
+
+Hoy vamos a eliminar el factor suerte. No necesitas destornilladores, solo `PowerShell`  y saber leer lo que tu PC te grita.
+
+---
+
+## Auditoría de Hardware
+
+El secreto no es adivinar, es preguntar. Usaremos comandos específicos para interrogar a dos componentes clave: la `Motherboard` (que define los límites) y la `RAM actual` (que define la compatibilidad).
+
+### 1. Conociendo el Terreno: La Motherboard
+
+Tu placa base es el techo de tu casa. Ella decide cuánta RAM puedes tener y a qué velocidad.
+
+Ejecuta este comando:
+
+```powershell
+C:\Users\unknow> Get-CimInstance Win32_BaseBoard
+Manufacturer  Product        SerialNumber  Version
+------------  -------        ------------  -------
+ASUSTeK       PRIME B450M-A  190349...     Rev X.0x
+```
+En este ejemplo te muestra lo siguiente: 
+1.  `Manufacturer` : El fabricante es **ASUSTeK** 
+2.  `Product` : El modelo es **PRIME B450M-A**. Este es el dato de oro.
+3.   `SerialNumber` : EL numero de serie que es 190349... (no es relevante para nosotros)
+4.  `Version` : La versión que es Rev X.0x (tampoco es relevante para nosotros)
+
+>**Ten en cuenta** :   Lo que realmente nos interesa es el modelo de la placa  en este caso es  `PRIME B450M-A`.
+
+Con esa información, puedes ir a la página del **fabricante** y buscar las especificaciones exactas. 
+Ahí te dirá cuánta **RAM soporta**, a qué velocidad y qué tipo `DDR3`, `DDR4`, `DDR5`.
+
+ ![Imagen Motherboard](../../assets/AsusMotherboard.png)
+ *Imagen de la Placa Base ASUS PRIME B450M-A* ⬆️
+
+ Por ejemplo: En este caso en la página de ASUS, nos dice que esta placa soporta:
+ 1. **Soporta** : RAM `DDR4`
+ 2. **Velocidad máxima** : 3200MHz (OC)
+ 3. **Capacidad máxima**: 128 GB (4 x 32 GB), siendo 64 GB el estándar común 
+ 4. **Arquitectura**: Dual Channel (doble canal).
+ 
+
+ >Esto es imporante porque gracias al comando sabemos el nombre de la placa y
+  podemos buscar sus especificaciones exactas.
+
+
+### 2. Conociendo tu RAM
+Para evitar conflictos, lo ideal es que la nueva RAM sea gemela de la que ya tienes. Vamos a extraer sus datos técnicos.
+
+Ejecuta este comando:
+
+`Get-CimInstance Win32_PhysicalMemory | select Manufacturer,Capacity,Speed,PartNumber,SMBIOSMemoryType`
+
+```powershell
+C:\Users\unknow> Get-CimInstance Win32_PhysicalMemory | select Manufacturer,Capacity,Speed,PartNumber,SMBIOSMemoryType
+
+Manufacturer     : Kingston
+Capacity         : 8589934592
+Speed            : 3200
+PartNumber       : KF3200C16D4/8GX
+SMBIOSMemoryType : 26
+
+```
+En este ejemplo, el resultado nos dice:
+1. `Manufacturer` : El fabricante es **Kingston**.
+2.  `Capacity` : La capacidad es `8589934592` bytes, lo que equivale a 8 GB (dividiendo por 1024^3).
+3.  `Speed` : La velocidad es `3200` MHz.
+     - **Consejo**: Si compras una RAM nueva, intenta igualar este número. Si mezclas velocidades (ej. 3200 con 2666), tu PC funcionará a la velocidad de la más lenta.
+4.  `PartNumber` : El número de parte es `KF3200C16D4/8GX`.
+     - **Consejo** :Es el modelo exacto del fabricante. Copiar y pegar esto en web es la forma más segura de comprar.
+5.  `SMBIOSMemoryType` : El tipo de memoria SMBIOS es `26`, que corresponde a `DDR4`.
+
+### Tabla de Tipos de RAM (SMBIOS)
+<table style="width: 100%; border-collapse: collapse; margin: auto; text-align: center;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid; padding: 8px;">SMBIOS  (Resultado)</th>
+      <th style="border: 1px solid; padding: 8px;">Ram </th>
+      <th style="border: 1px solid; padding: 8px;">Informacion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid; padding: 8px;">24</td>
+      <td style="border: 1px solid; padding: 8px;">DDR3</td>
+      <td style="border: 1px solid; padding: 8px;">PCs antiguos (2007-2014)</td>
+    </tr>
+    <tr style="background-color: rgba(56, 189, 248, 0.5); color: white;">
+      <td style="border: 1px solid; padding: 8px;">26</td>
+      <td style="border: 1px solid; padding: 8px;">DDR4</td>
+      <td style="border: 1px solid; padding: 8px;">Estándar actual (el más común)</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid; padding: 8px;">30</td>
+      <td style="border: 1px solid; padding: 8px;">DDR5</td>
+      <td style="border: 1px solid; padding: 8px;">Nueva generación</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid; padding: 8px;">34</td>
+      <td style="border: 1px solid; padding: 8px;">DDR5</td>
+      <td style="border: 1px solid; padding: 8px;">Variante nueva generación</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid; padding: 8px;">0</td>
+      <td style="border: 1px solid; padding: 8px;">Desconocido</td>
+      <td style="border: 1px solid; padding: 8px;">Suele ser DDR5 muy nueva</td>
+    </tr>
+  </tbody>
+</table>
+
+*Aqui vas a poder comparar el Numero de SMBIOS que te dara el comando para saber que RAM tienen Actualmente*
+
+
+
+>**Importante**: El dato clave aquí es el número de parte `KF3200C16D4/8GX`. Con ese número puedes buscar exactamente el modelo en la página del fabricante y ver sus especificaciones detalladas, como latencias, voltajes y compatibilidad.
+
+## Resumen de Compra
+
+Gracias a los comandos anteriores, ahora tienes la lista de compra exacta. 
+No busques **"Memoria RAM buena"**, busca esto:
+1. ✅ Tecnología: `DDR4` (Porque el código fue 26).
+
+2. ✅ Velocidad: `3200 MHz` (Para igualar a tu actual).
+
+3. ✅ Capacidad: `8 GB` (Para sumar un total de 16GB, por ejemplo).
+
+4. ✅ Límite: Verificado con el modelo de tu Motherboard (`PRIME B450M-A`).
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 600px; margin: auto;">
+
+  <div>
+    <img 
+      src="https://intermaco.com.ar/productos/90MB15Z0-M0EAYC.jpg"
+      style="width: 100%; height: 200px; object-fit: cover;"
+      alt="imagen de Motherboard"
+      loading="lazy"
+    />
+  </div>
+
+  <div>
+    <img 
+      src="https://m.media-amazon.com/images/I/61l4EStxhnL._AC_SL1274_.jpg"
+      style="width: 100%; height: 200px; object-fit: cover;"
+      alt="imagen de RAM"
+      loading="lazy"
+
+    />
+  </div>
+
+</div>
+
+
+##  Conclusión
+Saber qué hardware tienes no es solo curiosidad `geek`, es una estrategia financiera.
+ > Entender la diferencia entre un código 26 `(DDR4)` y un 30 `(DDR5)`,
+
+ <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 600px; margin: auto;">
+
+  <div>
+    <img 
+      src="https://media.kingston.com/kingston/product/DDR3_Non-ECC_Unbuffered_SODIMM_1R_X8_1-zm-lg.jpg"
+      style="width: 100%; height: 200px; object-fit: cover;"
+      alt="imagen de RAM DDR3"
+      loading="lazy"
+    />
+    <p style="text-align: center; font-size: 17px; "> DDR3</p>
+
+  </div>
+
+  <div>
+    <img 
+      src="https://www.perudataconsult.net/cdn/shop/products/MEMORIARAMS-4GB.jpg?v=1741459096"
+      style="width: 100%; height: 200px; object-fit: cover;"
+      alt="imagen de RAM DDR4"
+      loading="lazy"
+
+    />
+    <p style="text-align: center; font-size: 17px; "> DDR4</p>
+
+  </div>
+  <div>
+    <img 
+      src="https://static.webx.pk/files/2603/Images/Thumbnails-Large/adata-16gb-5600mhz-ddr5-desktop-ram-price-in-pakistan-2-1964-2603-2202020-160924012546813.jpg"
+      style="width: 100%; height: 200px; object-fit: cover;"
+      alt="imagen de RAM DDR5"
+      loading="lazy"
+    />
+    <p style="text-align: center; font-size: 17px; "> DDR5</p>
+  </div>
+
+</div>
+
+saber  el límite de tu placa base, es lo que separa una actualización 
+exitosa de una devolución frustrante en la tienda.
+
+Antes de abrir la billetera, abre la `Terminal`. Tómate **2 minutos** para auditar tu PC, 
+interpreta los números y haz una compra de cirujano. 
+
+>Tu computadora volará y tu dinero estará bien invertido.
