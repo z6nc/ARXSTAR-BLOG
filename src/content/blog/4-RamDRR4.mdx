@@ -64,7 +64,8 @@ Para evitar conflictos, lo ideal es que la nueva RAM sea gemela de la que ya tie
 
 Ejecuta este comando:
 
-`Get-CimInstance Win32_PhysicalMemory | select Manufacturer,Capacity,Speed,PartNumber,SMBIOSMemoryType`
+`Get-CimInstance Win32_PhysicalMemory | select`  
+`Manufacturer,Capacity,Speed,PartNumber,SMBIOSMemoryType`
 
 ```powershell
 C:\Users\unknow> Get-CimInstance Win32_PhysicalMemory | select Manufacturer,Capacity,Speed,PartNumber,SMBIOSMemoryType
